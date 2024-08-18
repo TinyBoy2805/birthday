@@ -163,7 +163,7 @@ navigator.mediaDevices
       const average = values / length;
 
       // Ngưỡng để nhận diện tiếng thổi, có thể nâng cấp bằng cách dùng tần số đặc thù của tiếng thổi
-      if (average > 175) {
+      if (average > 150) {
         // Điều chỉnh ngưỡng này tùy ý
         const myDiv = document.querySelectorAll(".flame");
         if (myDiv) {
@@ -185,14 +185,14 @@ navigator.mediaDevices
             button.classList.add("active");
         })
         }
-      } else if (average < 175 && average > 130) {
+      } else if (average <=150 && average > 120) {
         const myDiv = document.querySelectorAll(".flame");
         if (myDiv) {
           myDiv.forEach((fire) => {
             fire.style.opacity = "0.5"; // Ẩn thẻ div
           });
         }
-      } else if (average < 130 && average > 50) {
+      } else if (average <= 120 && average > 100) {
         const myDiv = document.querySelectorAll(".flame");
         if (myDiv) {
           myDiv.forEach((fire) => {
