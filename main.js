@@ -138,13 +138,13 @@ function triggerConfetti() {
 navigator.mediaDevices
   .getUserMedia({ audio: true })
   .then((stream) => {
-    const audioContext = new (window.AudioContext || window.AudioContext)();
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const analyser = audioContext.createAnalyser();
     const microphone = audioContext.createMediaStreamSource(stream);
-    const scriptProcessor = audioContext.createScriptProcessor(256, 1, 1);
+    const scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1); // Tăng kích thước buffer
 
     analyser.smoothingTimeConstant = 0.8;
-    analyser.fftSize = 1024;
+    analyser.fftSize = 2048; // Tăng độ phân giải FFT
 
     microphone.connect(analyser);
     analyser.connect(scriptProcessor);
@@ -162,11 +162,12 @@ navigator.mediaDevices
 
       const average = values / length;
 
-      // Ngưỡng để nhận diện tiếng thổi, có thể nâng cấp bằng cách dùng tần số đặc thù của tiếng thổi
-      if (average > 150) {
-        // Điều chỉnh ngưỡng này tùy ý
-        const myDiv = document.querySelectorAll(".flame");
-        if (myDiv) {
+      // Debug log để kiểm tra giá trị average
+      console.log(`Average volume: ${average}`);
+
+      const myDiv = document.querySelectorAll(".flame");
+      if (myDiv.length > 0) {
+        if (average > 150) {
           myDiv.forEach((fire) => {
             fire.style.display = "none"; // Ẩn thẻ div
           });
@@ -180,33 +181,24 @@ navigator.mediaDevices
           setTimeout(triggerSparkles, 8000);
           setTimeout(triggerConfetti, 10000);
           setTimeout(triggerSparkles, 12000);
-          birthdaySong.addEventListener("ended", ()=>
-        {
+          birthdaySong.addEventListener("ended", () => {
             button.classList.add("active");
-        })
-        }
-      } else if (average <=150 && average > 120) {
-        const myDiv = document.querySelectorAll(".flame");
-        if (myDiv) {
-          myDiv.forEach((fire) => {
-            fire.style.opacity = "0.5"; // Ẩn thẻ div
           });
-        }
-      } else if (average <= 120 && average > 100) {
-        const myDiv = document.querySelectorAll(".flame");
-        if (myDiv) {
+        } else if (average <= 150 && average > 120) {
           myDiv.forEach((fire) => {
-            fire.style.opacity = "0.8"; // Ẩn thẻ div
+            fire.style.opacity = "0.5"; // Điều chỉnh độ mờ
           });
-        }
-      } else {
-        const myDiv = document.querySelectorAll(".flame");
-        if (myDiv) {
+        } else if (average <= 120 && average > 100) {
           myDiv.forEach((fire) => {
-            fire.style.opacity = "1"; // Ẩn thẻ div
+            fire.style.opacity = "0.8"; // Điều chỉnh độ mờ
+          });
+        } else {
+          myDiv.forEach((fire) => {
+            fire.style.opacity = "1"; // Để nguyên
           });
         }
       }
     };
   })
   .catch((err) => console.error("Error accessing the microphone: ", err));
+
