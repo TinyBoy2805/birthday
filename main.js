@@ -15,6 +15,7 @@ const button = document.querySelector("#button");
 const card = document.querySelector("#card");
 const card_container = document.querySelector("#card-container");
 sparkleSound.volume = 1;
+let isOpen = 0;
 
 let isOff = 1;
 
@@ -60,6 +61,76 @@ for (let i = 0; i < 200; i++) {
   createStar();
 }
 
+navigator.mediaDevices
+  .getUserMedia({ audio: true })
+  .then((stream) => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const microphone = audioContext.createMediaStreamSource(stream);
+    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1); // Tăng kích thước buffer để giảm thiểu giật lag
+
+    analyser.smoothingTimeConstant = 0.85;
+    analyser.fftSize = 2048;
+
+    microphone.connect(analyser);
+    analyser.connect(scriptProcessor);
+    scriptProcessor.connect(audioContext.destination);
+
+    scriptProcessor.onaudioprocess = function () {
+      if(!isOpen) return;
+      const array = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(array);
+
+      let values = 0;
+      const length = array.length;
+      for (let i = 0; i < length; i++) {
+        values += array[i];
+      }
+
+      const average = values / length;
+
+      // Debug log để kiểm tra giá trị average
+      console.log(`Average volume: ${average}`);
+
+      const myDiv = document.querySelectorAll(".flame");
+      if (myDiv.length > 0) {
+        if (average > 100) { // Điều chỉnh ngưỡng phù hợp với môi trường thực tế
+          myDiv.forEach((fire) => {
+            fire.style.display = "none"; // Ẩn thẻ div
+          });
+          birthdaySong.play();
+          ha.classList.add("active");
+          hb.classList.add("active");
+          if (blow && blow.parentNode) {
+            document.body.removeChild(blow);
+          }
+          setTimeout(triggerConfetti, 2000);
+          setTimeout(triggerSparkles, 4000);
+          setTimeout(triggerConfetti, 6000);
+          setTimeout(triggerSparkles, 8000);
+          setTimeout(triggerConfetti, 10000);
+          setTimeout(triggerSparkles, 12000);
+          birthdaySong.addEventListener("ended", () => {
+            button.classList.add("active");
+          });
+        } else if (average <= 100 && average > 80) {
+          myDiv.forEach((fire) => {
+            fire.style.opacity = "0.5"; // Điều chỉnh độ mờ
+          });
+        } else if (average <= 80 && average > 60) {
+          myDiv.forEach((fire) => {
+            fire.style.opacity = "0.8"; // Điều chỉnh độ mờ
+          });
+        } else {
+          myDiv.forEach((fire) => {
+            fire.style.opacity = "1"; // Để nguyên
+          });
+        }
+      }
+    };
+  })
+  .catch((err) => console.error("Error accessing the microphone: ", err));
+
 cube.addEventListener("click", () => {
   head_cube.classList.toggle("active");
   left.classList.toggle("active");
@@ -91,9 +162,10 @@ cube.addEventListener("click", () => {
   setTimeout(clearHead, 500);
   setTimeout(clearBody, 500);
   setTimeout(showCake, 500);
+  isOpen = 1;
 });
 
-// Create sparkles effect at a random position
+// Tạo hiệu ứng sparkles tại vị trí ngẫu nhiên
 function triggerSparkles() {
   const pos = {
     x: Math.random() * window.innerWidth,
@@ -106,15 +178,15 @@ function triggerSparkles() {
   document.body.appendChild(target);
 
   party.sparkles(target, {
-    count: 5, // Number of sparkles
+    count: 5, // Số lượng sparkles
     size: 0.5,
     colors: ["#ff00ff", "#ffff00"],
   });
 
-  setTimeout(() => document.body.removeChild(target), 1000); // Clean up
+  setTimeout(() => document.body.removeChild(target), 1000); // Dọn dẹp
 }
 
-// Create confetti effect at a random position
+// Tạo hiệu ứng confetti tại vị trí ngẫu nhiên
 function triggerConfetti() {
   const pos = {
     x: Math.random() * window.innerWidth,
@@ -127,78 +199,12 @@ function triggerConfetti() {
   document.body.appendChild(target);
 
   party.confetti(target, {
-    count: 5, // Number of confetti pieces
+    count: 5, // Số lượng confetti
     size: 0.5,
     colors: ["#ff00ff", "#00ffff", "#ffff00"],
   });
 
-  setTimeout(() => document.body.removeChild(target), 1000); // Clean up
+  setTimeout(() => document.body.removeChild(target), 1000); // Dọn dẹp
 }
 
-navigator.mediaDevices
-  .getUserMedia({ audio: true })
-  .then((stream) => {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const microphone = audioContext.createMediaStreamSource(stream);
-    const scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1); // Tăng kích thước buffer
-
-    analyser.smoothingTimeConstant = 0.8;
-    analyser.fftSize = 2048; // Tăng độ phân giải FFT
-
-    microphone.connect(analyser);
-    analyser.connect(scriptProcessor);
-    scriptProcessor.connect(audioContext.destination);
-
-    scriptProcessor.onaudioprocess = function () {
-      const array = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(array);
-
-      let values = 0;
-      const length = array.length;
-      for (let i = 0; i < length; i++) {
-        values += array[i];
-      }
-
-      const average = values / length;
-
-      // Debug log để kiểm tra giá trị average
-      console.log(`Average volume: ${average}`);
-
-      const myDiv = document.querySelectorAll(".flame");
-      if (myDiv.length > 0) {
-        if (average > 60) {
-          myDiv.forEach((fire) => {
-            fire.style.display = "none"; // Ẩn thẻ div
-          });
-          birthdaySong.play();
-          ha.classList.add("active");
-          hb.classList.add("active");
-          document.body.removeChild(blow);
-          setTimeout(triggerConfetti, 2000);
-          setTimeout(triggerSparkles, 4000);
-          setTimeout(triggerConfetti, 6000);
-          setTimeout(triggerSparkles, 8000);
-          setTimeout(triggerConfetti, 10000);
-          setTimeout(triggerSparkles, 12000);
-          birthdaySong.addEventListener("ended", () => {
-            button.classList.add("active");
-          });
-        } else if (average <= 60 && average > 40) {
-          myDiv.forEach((fire) => {
-            fire.style.opacity = "0.5"; // Điều chỉnh độ mờ
-          });
-        } else if (average <= 40 && average > 20) {
-          myDiv.forEach((fire) => {
-            fire.style.opacity = "0.8"; // Điều chỉnh độ mờ
-          });
-        } else {
-          myDiv.forEach((fire) => {
-            fire.style.opacity = "1"; // Để nguyên
-          });
-        }
-      }
-    };
-  })
-  .catch((err) => console.error("Error accessing the microphone: ", err));
 
