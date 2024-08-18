@@ -61,39 +61,37 @@ for (let i = 0; i < 200; i++) {
   createStar();
 }
 
+let audioContext;
+document.body.addEventListener('click', () => {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  }
+});
+
 navigator.mediaDevices
   .getUserMedia({ audio: true })
-  .then((stream) => {
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
+  .then(async (stream) => {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    // Tải AudioWorkletModule
+    await audioContext.audioWorklet.addModule('processor.js');
+
     const microphone = audioContext.createMediaStreamSource(stream);
-    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+    const volumeNode = new AudioWorkletNode(audioContext, 'volume-processor');
 
-    analyser.smoothingTimeConstant = 0.85;
-    analyser.fftSize = 2048;
-
-    microphone.connect(analyser);
-    analyser.connect(scriptProcessor);
-    scriptProcessor.connect(audioContext.destination);
-
-    scriptProcessor.onaudioprocess = function () {
+    // Nhận dữ liệu từ bộ xử lý
+    volumeNode.port.onmessage = (event) => {
       if(!isOpen) return; // Chỉ thu âm nếu hộp quà đã mở
-      const array = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(array);
 
-      let values = 0;
-      const length = array.length;
-      for (let i = 0; i < length; i++) {
-        values += array[i];
-      }
-
-      const average = values / length;
+      const average = event.data;
 
       console.log(`Average volume: ${average}`);
 
       const myDiv = document.querySelectorAll(".flame");
       if (myDiv.length > 0) {
-        if (average > 80) { // Điều chỉnh ngưỡng âm thanh
+        if (average > 0.1) { // Điều chỉnh ngưỡng âm thanh
           myDiv.forEach((fire) => {
             fire.style.display = "none";
           });
@@ -112,11 +110,11 @@ navigator.mediaDevices
           birthdaySong.addEventListener("ended", () => {
             button.classList.add("active");
           });
-        } else if (average <= 80 && average > 60) {
+        } else if (average <= 0.1 && average > 0.05) {
           myDiv.forEach((fire) => {
             fire.style.opacity = "0.5";
           });
-        } else if (average <= 60 && average > 40) {
+        } else if (average <= 0.05 && average > 0.02) {
           myDiv.forEach((fire) => {
             fire.style.opacity = "0.8";
           });
@@ -127,8 +125,14 @@ navigator.mediaDevices
         }
       }
     };
+
+    microphone.connect(volumeNode);
+    volumeNode.connect(audioContext.destination);
   })
-  .catch((err) => console.error("Error accessing the microphone: ", err));
+  .catch((err) => {
+    console.error("Error accessing the microphone: ", err);
+    alert("Microphone access error: " + err.message);
+  });
 
 cube.addEventListener("click", () => {
   head_cube.classList.toggle("active");
@@ -177,7 +181,7 @@ function triggerSparkles() {
   document.body.appendChild(target);
 
   party.sparkles(target, {
-    count: 5, // Số lượng sparkles
+    count: 2, // Số lượng sparkles
     size: 0.5,
     colors: ["#ff00ff", "#ffff00"],
   });
@@ -198,7 +202,7 @@ function triggerConfetti() {
   document.body.appendChild(target);
 
   party.confetti(target, {
-    count: 5, // Số lượng confetti
+    count: 2, // Số lượng confetti
     size: 0.5,
     colors: ["#ff00ff", "#00ffff", "#ffff00"],
   });
