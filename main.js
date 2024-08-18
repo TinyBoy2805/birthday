@@ -67,7 +67,7 @@ navigator.mediaDevices
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const analyser = audioContext.createAnalyser();
     const microphone = audioContext.createMediaStreamSource(stream);
-    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1); // Tăng kích thước buffer để giảm thiểu giật lag
+    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
 
     analyser.smoothingTimeConstant = 0.85;
     analyser.fftSize = 2048;
@@ -77,7 +77,7 @@ navigator.mediaDevices
     scriptProcessor.connect(audioContext.destination);
 
     scriptProcessor.onaudioprocess = function () {
-      if(!isOpen) return;
+      if(!isOpen) return; // Chỉ thu âm nếu hộp quà đã mở
       const array = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(array);
 
@@ -89,14 +89,13 @@ navigator.mediaDevices
 
       const average = values / length;
 
-      // Debug log để kiểm tra giá trị average
       console.log(`Average volume: ${average}`);
 
       const myDiv = document.querySelectorAll(".flame");
       if (myDiv.length > 0) {
-        if (average > 100) { // Điều chỉnh ngưỡng phù hợp với môi trường thực tế
+        if (average > 80) { // Điều chỉnh ngưỡng âm thanh
           myDiv.forEach((fire) => {
-            fire.style.display = "none"; // Ẩn thẻ div
+            fire.style.display = "none";
           });
           birthdaySong.play();
           ha.classList.add("active");
@@ -113,17 +112,17 @@ navigator.mediaDevices
           birthdaySong.addEventListener("ended", () => {
             button.classList.add("active");
           });
-        } else if (average <= 100 && average > 80) {
-          myDiv.forEach((fire) => {
-            fire.style.opacity = "0.5"; // Điều chỉnh độ mờ
-          });
         } else if (average <= 80 && average > 60) {
           myDiv.forEach((fire) => {
-            fire.style.opacity = "0.8"; // Điều chỉnh độ mờ
+            fire.style.opacity = "0.5";
+          });
+        } else if (average <= 60 && average > 40) {
+          myDiv.forEach((fire) => {
+            fire.style.opacity = "0.8";
           });
         } else {
           myDiv.forEach((fire) => {
-            fire.style.opacity = "1"; // Để nguyên
+            fire.style.opacity = "1";
           });
         }
       }
