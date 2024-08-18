@@ -1,10 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Angkor&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: "Roboto Condensed", sans-serif;
+  user-select: none;
 }
 :root {
   --dark-color: #000;
@@ -420,6 +422,8 @@ body {
   font-weight: bold;
   filter: drop-shadow(0 0 3px pink);
   opacity: 0;
+  text-align: justify;
+  user-select: none;
 }
 
 #ha
@@ -486,6 +490,152 @@ body {
 #blow.active
 {
     animation: appear 5s linear forwards;
+}
+
+
+#button
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 150px;
+    height: 50px;
+    border: 2px solid white;
+    background-color: transparent;
+    border-radius: 50% 0 50% 0;
+    color: white;
+    user-select: none;
+    bottom: 6rem;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 20px;
+    opacity: 0;
+}
+
+#button.active
+{
+    animation: appear 2s linear forwards;
+}
+
+#button:hover
+{
+    border: 2px solid rgb(255, 251, 26);
+    color: rgb(255, 251, 26);
+}
+
+#card-container
+{
+    position: absolute;
+    width: 300px;
+    height: 400px;
+    opacity: 0;
+    
+}
+
+#card
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease;
+    cursor: pointer;
+}
+
+#card-front
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: 30px;
+    user-select: none;
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    color: white;
+    box-shadow:0px 0px 5px 1px #000000 ;
+    border: 5px solid rgb(255, 248, 252);
+    background-image: radial-gradient(#fffafa 1.7000000000000002px, #f2709c 1.7000000000000002px);
+    background-size: 34px 34px;
+
+}
+
+#card-back
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    border-radius: 10px;
+    transform: rotateY(180deg);
+    background-color: #0e0319;
+    overflow: hidden;
+    
+}
+
+#card-back::before
+{
+    content: "";
+    position: absolute;
+    width: 70px;
+    height: 800px;
+    background: linear-gradient(rgb(22, 201, 255), rgb(255, 60, 248));
+    filter: drop-shadow(0 0 3px white);
+    animation: turn 10s linear infinite;
+
+}
+
+#card-back::after
+{
+    content: "Hehehe, nghe bảo hôm nay sinh nhật của cậu, tui không biết làm gì ngoài chúc cậu những điều tốt đẹp nhất. Sinh nhật zui zẻ nhóeeee 🎉🎉🎉";
+    position: absolute;
+    width: 290px;
+    height: 390px;
+    border-radius: 10px;
+    background-color: rgb(11, 2, 24);
+    border: 2px solid rgb(0, 0, 0);
+    background-repeat: no-repeat;
+    background-size: 240px;
+    color: white;
+    text-align: justify;
+    font-size: 20px;
+    line-height: 1.5rem;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#card.active
+{
+    transform: rotateY(180deg);
+}
+
+#card-container.active
+{
+    z-index: 10;
+    animation: appear 3s linear forwards;
+}
+
+
+
+@keyframes turn
+{
+    to{
+        transform: rotateZ(360deg);
+    }
 }
 
 @keyframes appear {
@@ -666,7 +816,7 @@ body {
       height: 15px;
     }
   
-    h1 {
+    #ha, #hb {
       font-size: 2rem;
     }
   }
@@ -699,7 +849,7 @@ body {
       height: 10px;
     }
   
-    h1 {
+    #ha, #hb{
       font-size: 1.5rem;
     }
   }
@@ -732,7 +882,7 @@ body {
       height: 8px;
     }
   
-    h1 {
+    #ha, #hb {
       font-size: 1.2rem;
     }
   }

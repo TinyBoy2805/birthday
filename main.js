@@ -11,9 +11,27 @@ const cake = document.querySelector(".cake");
 const ha = document.querySelector("#ha");
 const hb = document.querySelector("#hb");
 const blow = document.getElementById("blow");
+const button = document.querySelector("#button");
+const card = document.querySelector("#card");
+const card_container = document.querySelector("#card-container");
 sparkleSound.volume = 1;
 
 let isOff = 1;
+
+card.addEventListener("click", ()=>
+{
+    card.classList.toggle("active");
+})
+
+button.addEventListener("click", ()=>
+{
+    document.body.removeChild(ha);
+    document.body.removeChild(hb);
+    document.body.removeChild(cake);
+    button.style.display = "none";
+    card_container.classList.add("active");
+})
+
 
 function clearHead() {
   cube.removeChild(head_cube);
@@ -162,6 +180,10 @@ navigator.mediaDevices
           setTimeout(triggerSparkles, 8000);
           setTimeout(triggerConfetti, 10000);
           setTimeout(triggerSparkles, 12000);
+          birthdaySong.addEventListener("ended", ()=>
+        {
+            button.classList.add("active");
+        })
         }
       } else if (average < 175 && average > 130) {
         const myDiv = document.querySelectorAll(".flame");
