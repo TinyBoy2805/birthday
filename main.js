@@ -87,7 +87,7 @@ navigator.mediaDevices
 
       const average = event.data;
 
-      console.log(`Average volume: ${average}`);
+      // console.log(`Average volume: ${average}`);
 
       const myDiv = document.querySelectorAll(".flame");
       if (myDiv.length > 0) {
