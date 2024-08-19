@@ -91,7 +91,7 @@ navigator.mediaDevices
 
       const myDiv = document.querySelectorAll(".flame");
       if (myDiv.length > 0) {
-        if (average > 60) { // Điều chỉnh ngưỡng âm thanh
+        if (average > 10) { // Điều chỉnh ngưỡng âm thanh
           myDiv.forEach((fire) => {
             fire.style.display = "none";
           });
@@ -110,11 +110,11 @@ navigator.mediaDevices
           birthdaySong.addEventListener("ended", () => {
             button.classList.add("active");
           });
-        } else if (average <= 60 && average > 40) {
+        } else if (average <= 10 && average > 5) {
           myDiv.forEach((fire) => {
             fire.style.opacity = "0.5";
           });
-        } else if (average <= 40 && average > 20) {
+        } else if (average <= 5 && average > 2) {
           myDiv.forEach((fire) => {
             fire.style.opacity = "0.8";
           });
