@@ -822,7 +822,7 @@ body {
   }
   
   /* Responsive cho màn hình nhỏ hơn 480px (Điện thoại nhỏ) */
-  @media (max-width: 480px) {
+  @media screen and (max-width: 767px){
     .container {
       width: 200px;
       height: 200px;
@@ -842,6 +842,7 @@ body {
     .cake {
       width: 100px;
       height: 100px;
+      transform: translateX(-65px);
     }
   
     .cherry {
@@ -850,39 +851,8 @@ body {
     }
   
     #ha, #hb{
+      text-align: center;
       font-size: 1.5rem;
     }
   }
   
-  /* Responsive cho các màn hình rất nhỏ như điện thoại dọc hoặc các thiết bị đặc biệt */
-  @media (max-width: 360px) {
-    .container {
-      width: 180px;
-      height: 180px;
-    }
-  
-    .cube {
-      width: 60%;
-      height: 60%;
-    }
-  
-    .body-gift,
-    .head-gift {
-      width: 60%;
-      height: 60%;
-    }
-  
-    .cake {
-      width: 80px;
-      height: 80px;
-    }
-  
-    .cherry {
-      width: 8px;
-      height: 8px;
-    }
-  
-    #ha, #hb {
-      font-size: 1.2rem;
-    }
-  }
