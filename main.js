@@ -91,7 +91,7 @@ navigator.mediaDevices
 
       const myDiv = document.querySelectorAll(".flame");
       if (myDiv.length > 0) {
-        if (average > 0.5) { // Điều chỉnh ngưỡng âm thanh
+        if (average > 0.6) { // Điều chỉnh ngưỡng âm thanh
           myDiv.forEach((fire) => {
             fire.style.display = "none";
           });
@@ -110,7 +110,7 @@ navigator.mediaDevices
           birthdaySong.addEventListener("ended", () => {
             button.classList.add("active");
           });
-        } else if (average <= 0.5 && average > 0.05) {
+        } else if (average <= 0.6 && average > 0.05) {
           myDiv.forEach((fire) => {
             fire.style.opacity = "0.5";
           });
