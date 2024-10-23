@@ -1,11 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Angkor&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Roboto Condensed", sans-serif;
+  font-family: "Quicksand", sans-serif;
   user-select: none;
 }
 :root {
@@ -18,7 +16,7 @@ body {
   align-items: center;
   min-height: 100vh;
   /* background: #141416; */
-  background-color: var(--dark-color);
+  background-color: #191970;
 }
 
 .container {
@@ -316,19 +314,19 @@ body {
     &.one {
       width: 50px;
       transform: translateX(50px);
-      background: radial-gradient(circle, white 7px, skyblue 7px), skyblue;
+      background: radial-gradient(circle, white 7px, rgb(246, 255, 117) 7px), skyblue;
       background-size: 10px 40px;
     }
     &.two {
       width: 100px;
-      background: radial-gradient(circle, white 10px, pink 10px), pink;
+      background: radial-gradient(circle, white 10px, rgb(48, 255, 141) 10px), pink;
       background-size: 10px 40px;
       background-position-x: 10px;
       transform: translateX(25px);
     }
     &.three {
       width: 150px;
-      background: radial-gradient(circle, white 10px, chocolate 10px), chocolate;
+      background: radial-gradient(circle, white 10px, rgb(255, 151, 177) 10px), chocolate;
       background-size: 10px 40px;
     }
   }
@@ -433,7 +431,8 @@ body {
 
 #hb
 {
-    top: 6.5rem;
+    top: 7rem;
+    font-size: 3rem;
 }
 
 #ha.active {
@@ -503,7 +502,7 @@ body {
     height: 50px;
     border: 2px solid white;
     background-color: transparent;
-    border-radius: 50% 0 50% 0;
+    border-radius: 20px;
     color: white;
     user-select: none;
     bottom: 6rem;
@@ -527,7 +526,7 @@ body {
 #card-container
 {
     position: absolute;
-    width: 300px;
+    width: 400px;
     height: 400px;
     opacity: 0;
     
@@ -561,7 +560,7 @@ body {
     color: white;
     box-shadow:0px 0px 5px 1px #000000 ;
     border: 5px solid rgb(255, 248, 252);
-    background-image: radial-gradient(#fffafa 1.7000000000000002px, #f2709c 1.7000000000000002px);
+    background-image: radial-gradient(#fcfcfd 2px, #fff839 1.7000000000000002px);
     background-size: 34px 34px;
 
 }
@@ -579,7 +578,7 @@ body {
     background-size: 100%;
     border-radius: 10px;
     transform: rotateY(180deg);
-    background-color: #0e0319;
+    background-color: #060625;
     overflow: hidden;
     
 }
@@ -590,7 +589,7 @@ body {
     position: absolute;
     width: 70px;
     height: 800px;
-    background: linear-gradient(rgb(22, 201, 255), rgb(255, 60, 248));
+    background: linear-gradient(#00BFFF, #FF00FF);
     filter: drop-shadow(0 0 3px white);
     animation: turn 10s linear infinite;
 
@@ -598,23 +597,24 @@ body {
 
 #card-back::after
 {
-    content: "Hehehe, nghe bảo hôm nay sinh nhật của cậu, tui không biết làm gì ngoài chúc cậu những điều tốt đẹp nhất. Sinh nhật zui zẻ nhóeeee 🎉🎉🎉";
+    content: "Sinh nhật zui zẻ nhóe 🎂🎉, chúc m nhiều sức khỏe để đánh bại mọi deadline và đạt được GPA 4.0 💪📚. Chúc mọi ước mơ của m sẽ trở thành hiện thực 🎁✨. Luôn luôn giữ nụ cười trên môi và bước đến những thành công mới nhooé! 🥳🎈 ";
     position: absolute;
-    width: 290px;
+    width: 390px;
     height: 390px;
     border-radius: 10px;
-    background-color: rgb(11, 2, 24);
+    background-color: #06031d;
     border: 2px solid rgb(0, 0, 0);
     background-repeat: no-repeat;
     background-size: 240px;
-    color: white;
+    color: #fffafa;
     text-align: justify;
-    font-size: 20px;
-    line-height: 1.5rem;
+    font-size: 22px;
+    line-height: 2rem;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    text-indent: 1rem;
     
 }
 
@@ -822,7 +822,7 @@ body {
   }
   
   /* Responsive cho màn hình nhỏ hơn 480px (Điện thoại nhỏ) */
-  @media (max-width: 480px) {
+  @media screen and (max-width: 767px){
     .container {
       width: 200px;
       height: 200px;
@@ -842,6 +842,7 @@ body {
     .cake {
       width: 100px;
       height: 100px;
+      transform: translateX(-65px);
     }
   
     .cherry {
@@ -850,39 +851,8 @@ body {
     }
   
     #ha, #hb{
+      text-align: center;
       font-size: 1.5rem;
     }
   }
   
-  /* Responsive cho các màn hình rất nhỏ như điện thoại dọc hoặc các thiết bị đặc biệt */
-  @media (max-width: 360px) {
-    .container {
-      width: 180px;
-      height: 180px;
-    }
-  
-    .cube {
-      width: 60%;
-      height: 60%;
-    }
-  
-    .body-gift,
-    .head-gift {
-      width: 60%;
-      height: 60%;
-    }
-  
-    .cake {
-      width: 80px;
-      height: 80px;
-    }
-  
-    .cherry {
-      width: 8px;
-      height: 8px;
-    }
-  
-    #ha, #hb {
-      font-size: 1.2rem;
-    }
-  }
